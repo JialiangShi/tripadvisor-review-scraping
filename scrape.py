@@ -28,7 +28,7 @@ delay = (2, 3)
 # <p class="partial_entry">古色古香的飯店，雖然交通不太方便，但飯店有提供接駁車搭乘往捷運站，職員亦親切有禮。房間舒適，風景好，會再入住</p>
 # driver.find_element_by_link_text('往下').click()
 
-for i in range(5):
+for i in range(10):
 
     soup = BeautifulSoup(driver.page_source, 'lxml')
     for link in soup.find_all("span", {"class": "noQuotes"}):
@@ -43,7 +43,7 @@ for i in range(5):
         break
 
 
-print(len(titles))
+print(titles)
 # print(comments)
 input("Press Enter to quit")
 driver.quit() # close browser
