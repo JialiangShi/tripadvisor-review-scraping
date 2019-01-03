@@ -10,7 +10,7 @@ def read_excel(file_path):
     urls = hotels['TripAdvisor網址']
     return names, urls
 
-def get_data(url):
+def scrape_data(url):
     driver = webdriver.Chrome('/usr/local/bin/chromedriver')
     driver.get(url)
     titles = []
@@ -21,6 +21,7 @@ def get_data(url):
     # driver.find_element_by_class_name('ui_radio item').click()
     while True:
         # show whole comments, doesn't work for now
+        # driver.find_element_by_link_text('所有語言').click()
         # driver.find_element_by_link_text('更多').click()
 
         soup = BeautifulSoup(driver.page_source, 'html.parser')
@@ -45,19 +46,24 @@ def get_data(url):
     return titles, comments, replies
 
 
-# file_path = 'hotel.xlsx'
-# names, urls = read_excel(file_path)
-# output = []
-# for name_url in zip(names, urls):
-#     if not name_url[1]:
-#         continue
-#     titles, comments = get_data(name_url[1])
-#     output.append([name_url[0], data])
-# print(len(output))
+file_path = 'hotel.xlsx'
+hotels = []
+titles = []
+comments = []
+replies = []
 
-url = 'https://www.tripadvisor.com.tw/Hotel_Review-g13808450-d3856249-Reviews-Taichung_Harbor_Hotel-Wuqi_Taichung.html'
-titles, comments, replies = get_data(url)
+names, urls = read_excel(file_path)
 
-df = pd.DataFrame({'titles': titles, 'comments': comments, 'replies': replies})
+for name_url in zip(names, urls):
+    t, c, r = scrape_data(name_url[1])
+    hotels.extend([name_url[0] for i in range(len(t))])
+    titles.extend(t)
+    comments.extend(c)
+    replies.extend(r)
+
+# url = 'https://www.tripadvisor.com.tw/Hotel_Review-g13808450-d3856249-Reviews-Taichung_Harbor_Hotel-Wuqi_Taichung.html'
+# titles, comments, replies = scrape_data(url)
+
+df = pd.DataFrame({'hotels': hotels, 'titles': titles, 'comments': comments, 'replies': replies})
 df.to_csv('comments.csv', index=False, encoding='utf-8')
 
