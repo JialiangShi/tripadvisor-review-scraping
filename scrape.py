@@ -23,7 +23,7 @@ def scrape_data(url):
     delay = (1, 2)
 
     # driver.find_element_by_class_name('ui_radio item').click()
-    for i in range(1):  # break when there is no more pages
+    while True:  # break when there is no more pages
         # show whole comments, doesn't work for now
         # driver.find_element_by_link_text('所有語言').click()
         # driver.find_element_by_link_text('更多').click()
